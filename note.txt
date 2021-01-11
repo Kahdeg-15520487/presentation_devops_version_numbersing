@@ -1,0 +1,23 @@
+presentation on version numbering release version
+
+semantic versioning
+	definition
+		major.minor.patch-hotfix
+current process
+	step:
+		release process triggered
+		commit is picked
+		commit is versioned
+proposal
+	step:
+		release process triggered
+		dev decided to release next commit
+		dev version the source code
+		dev merge commit to master
+		dev tag commit with version that is defined in source code
+	pros:
+		shifting commit picking process from devops to dev -> empower dev team
+		enable automatic build versioning instead of the current datetime tag -> reduce potential error when choosing build to deploy
+	cons:
+		human-dependent, require dev team to manually tag the commit with version number
+		

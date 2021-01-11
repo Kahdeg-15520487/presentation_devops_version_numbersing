@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Title</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="highlight/styles/dracula.css">
+  <link rel="stylesheet" type="text/css" href="asciinema-player.css" />
+  <script src="highlight/highlight.pack.js"></script>
+  <script type="text/javascript" src="renderjson.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad();
+  </script>
+  <style>
+    @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+    @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+    @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+    body {
+      font-family: 'Droid Serif';
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: 'Yanone Kaffeesatz';
+      font-weight: normal;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+    }
+
+    .class {
+      color: #4EC9A1
+    }
+
+    .interface {
+      color: #B8D7A3
+    }
+
+    .empha {
+      color: red
+    }
+
+    .small-text {
+      font-size: 16px
+    }
+
+    .small-image img {
+      max-width: 100%;
+      height: 100%;
+    }
+
+    .bigimage {
+      width: 100%;
+      max-height: unset;
+      max-width: unset;
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .remark-code,
+    .remark-inline-code {
+      color: white;
+      font-family: 'Ubuntu Mono';
+    }
+
+    .hljs-default .hljs-string {
+      color: #D0967E;
+    }
+
+    .navback {
+      float: right;
+    }
+  </style>
+  <script>
+    // setup 
+    // document.addEventListener("DOMContentLoaded", function (event) {
+    //   let linq_collab = document.getElementById("linq-collabsible");
+    //   renderjson.set_show_to_level(3);
+    //   linq_collab.appendChild(
+    //     renderjson([{
+    //         'id': 0,
+    //         'name': 'Molly',
+    //         'address': 'W Smithfield, London EC1A 7BE',
+    //         'city': 'London'
+    //       },
+    //       {
+    //         'id': 1,
+    //         'name': 'Sherlock',
+    //         'address': '221b Baker St',
+    //         'city': 'London'
+    //       },
+    //       {
+    //         'id': 2,
+    //         'name': 'Mycroft',
+    //         'address': '10 Downing St',
+    //         'city': 'London'
+    //       },
+    //     ])
+    //   );
+    //   renderjson.set_show_to_level(1);
+    //   console.log(linq_collab);
+    // });
+    const protocol = {
+      'http:': 'http://localhost:5000',
+      'https:': 'https://localhost:5001',
+    }
+
+    const slideUrl = {
+      '1': protocol[location.protocol] + '/api/value'
+    };
+
+    function request(slide) {
+      console.log(slide);
+      let t0 = performance.now();
+      fetch(slideUrl[slide])
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (myJson) {
+          console.log(0);
+          let result = JSON.stringify(myJson);
+          console.log(result);
+          let t1 = performance.now();
+          let resultDisplay = document.getElementById("result" + slide);
+          while (resultDisplay.firstChild) {
+            resultDisplay.removeChild(resultDisplay.firstChild);
+          }
+          resultDisplay.appendChild(renderjson(myJson));
+          document.getElementById("time" + slide).textContent = "time taken: " + (t1 - t0) + " milliseconds.";
+        });
+    }
+  </script>
+</head>
+
+<body>
+  <textarea id="source">
+
+name: start
+class: center
+.navback[.bottomlink[[pdf](pr.pdf)]]
+# Presentation on version numbering
+
+.small-image[![title](images/title.png)]
+---
+name: contents
+class: left
+
+# Table of Contents
+
+• [Semantic versioning](#semver)
+
+• [Current process](#curr)
+
+• [Proposal](#propp)
+
+---
+name: semver
+class: left
+.navback[[back](#contents)]
+# Semantic versioning
+
+.center[![semantic](images/semantic_versioning.png)]
+
+---
+class: left
+.navback[[back](#contents)]
+# Semantic versioning
+
+.center[.small-image[![tree](images/example.png)]]
+
+---
+name: curr
+class: left
+.navback[[back](#contents)]
+# Current process
+1. Release process triggered
+  - Planned
+  - dev team want to release a bug fix
+2. Devops ask dev team for commit to release and other release info
+3. Devops manually add git tag for those commit
+4. Devops take the build of those commit and deploy onto the release pipeline
+
+---
+name: curr_pro_con
+# Pros
+- Simple, doesn't require much effort from dev team cause Devops handle most of the opreations
+
+# Cons
+- require manual work -> time consuming, human-depedent -> error-prone
+- build number is not related to version
+- git tag only exist as a book-keeping tool
+
+---
+name: propp
+class: left
+.navback[[back](#contents)]
+# Proposal
+1. Release process triggered
+  - Planned
+  - dev team want to release a bug fix
+2. Dev team choose the commit to release and write changelog
+  - the changelog can be simple and minimalistic
+    - bug number, miscelaneous change
+3. Dev team tag the commit with approriate version number
+4. Devops choose the build to deploy based on the Build number (generated from git tag)
+
+---
+name: propp_pro_con
+# Pros
+- shifting commit picking to dev
+  - empower dev team, decentralize power from Devops
+- enable more automation option in the ci/cd pipeline
+  - ex: automatic build number generation -> reduce potential error when choosing build to deploy 
+
+# Cons
+- require effort from dev team to manage the git tag (add and delete)
+
+---
+class: center, middle
+
+# QA Time!
+
+---
+class: center, middle
+
+# The End
+
+    </textarea>
+  <script src="remark.js">
+  </script>
+  <script>
+    var slideshow = remark.create();
+  </script>
+  <script src="asciinema-player.js"></script>
+</body>
+
+</html>
